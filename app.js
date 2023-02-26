@@ -79,7 +79,7 @@ function reload() {
 }
 
 function loadCustomModel() {
-  featureExtractor.load("./model/model.json");
+  featureExtractor.load("model/model.json");
   console.log("Custom model loaded");
 }
 
