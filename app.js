@@ -38,6 +38,7 @@ function speak(text) {
 function start() {
   intro.style.display = "none";
   gameDiv.style.display = "block";
+  speak("Take a picture of a banana");
 }
 
 function htplay() {
