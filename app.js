@@ -1,7 +1,6 @@
 window.addEventListener("load", init);
 const featureExtractor = ml5.featureExtractor("MobileNet", modelLoaded);
-const options = { numLabels: 2 };
-const classifier = featureExtractor.classification(init.img, options);
+const classifier = featureExtractor.classification(init.img);
 const awns = document.getElementById("result");
 
 function init() {
@@ -43,7 +42,7 @@ function start() {
 
 function htplay() {
   window.alert(
-    "When you start the game you're expected to take a picture of a banana! \nIf you take a picture of a banana and the AI reconizes it you get a point!"
+    "When you start the game you're expected to take a picture of a banana! \nIf you take a picture of a banana and the AI recognizes it you get a point!"
   );
 }
 
