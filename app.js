@@ -1,4 +1,9 @@
 window.addEventListener("load", init);
+const featureExtractor = ml5.featureExtractor("MobileNet", modelLoaded);
+const options = { numLabels: 2 };
+const classifier = featureExtractor.classification(init.img, options);
+const awns = document.getElementById("result");
+
 function init() {
   intro = document.getElementById("intro");
   gameDiv = document.getElementById("game");
@@ -14,7 +19,21 @@ function init() {
 
   game.style.display = "none";
 }
-const featureExtractor = ml5.featureExtractor("MobileNet", modelLoaded);
+
+let synth = window.speechSynthesis;
+
+function speak(text) {
+  if (synth.speaking) {
+    synth.cancel();
+    setTimeout(function () {
+      synth.speak(text);
+    }, 250);
+  }
+  if (text !== "") {
+    let utterThis = new SpeechSynthesisUtterance(text);
+    synth.speak(utterThis);
+  }
+}
 
 function start() {
   intro.style.display = "none";
@@ -32,7 +51,20 @@ function fileAdded() {
   img.src = URL.createObjectURL(event.target.files[0]);
   img.style.display = "inline-block";
   classify();
-  retrybtn.style.display = "inline-block";
+}
+
+function classify() {
+  classifier.classify(img, (err, result) => {
+    console.log(err);
+    console.log(result);
+    if (result[0].label == "Banana") {
+      awns.innerHTML = "Correct! that is a banana!";
+      speak("Correct! that is a banana!");
+    } else {
+      awns.innerHTML = "That is not a banana, your AI overlord is displeased.";
+      speak("That is not a banana, your AI overlord is displeased.");
+    }
+  });
 }
 
 function reload() {
@@ -43,4 +75,14 @@ function reload() {
   URL.revokeObjectURL(img.src);
   img.src = "";
   location.reload();
+}
+
+function loadCustomModel() {
+  featureExtractor.load("./model/model.json");
+  console.log("Custom model loaded");
+}
+
+function modelLoaded() {
+  console.log("Model Loaded!");
+  loadCustomModel();
 }
